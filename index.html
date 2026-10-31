@@ -50,7 +50,7 @@ a{color:inherit;text-decoration:none;}
 .theme-btn:hover{transform:translateY(-1px);color:var(--ink);}
 
 /* Hero */
-.hero{position:relative;padding:150px 0 40px;overflow:hidden;}
+.hero{position:relative;padding:150px 0 28px;overflow:hidden;}
 .blob{position:absolute;border-radius:50%;filter:blur(72px);opacity:.34;z-index:0;}
 .blob.b1{width:520px;height:520px;background:#c7d2fe;top:-160px;left:-120px;}
 .blob.b2{width:420px;height:420px;background:#f5d0fe;top:-80px;right:-120px;}
@@ -66,9 +66,8 @@ h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:tex
 .cta{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap;}
 
 /* 章节标题 */
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:56px 0 30px;flex-wrap:wrap;gap:10px;}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:44px 0 30px;flex-wrap:wrap;gap:10px;}
 .sec-head h2{font-size:clamp(22px,3.4vw,32px);font-weight:700;letter-spacing:-.02em;margin:0;}
-.sec-head .more{font-size:13px;color:var(--muted);}
 .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:10px;display:block;}
 
 /* 小程序卡片 */
@@ -89,6 +88,26 @@ h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:tex
 .qr{width:96px;height:96px;flex:0 0 auto;border-radius:12px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .qr img{width:86%;height:auto;display:block;}
 .qr.ph{background:var(--surface2);color:var(--muted);font-size:11px;letter-spacing:.1em;}
+.mini{display:flex;flex-direction:column;gap:14px;}
+.mini .card{flex:1;}
+.phones-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:16px;}
+.phones{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.phone-btn{display:block;width:100%;aspect-ratio:700/1529;padding:0;border:0;background:none;font:inherit;line-height:0;cursor:zoom-in;transition:transform .3s cubic-bezier(.2,.7,.2,1);}
+.phone-btn img{display:block;width:100%;height:100%;object-fit:cover;}
+.phone-btn:hover{transform:translateY(-3px);}
+.phone-btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}
+
+/* 介绍图大图 */
+dialog.lightbox{width:min(94vw,560px);max-width:none;max-height:92vh;margin:auto;padding:0;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 40px 100px rgba(0,0,0,.45);overflow:hidden;}
+dialog.lightbox.wide{width:min(94vw,940px);}
+dialog.lightbox::backdrop{background:rgba(8,8,10,.74);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.lb-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);}
+.lb-close{border:1px solid var(--line);background:var(--surface2);color:var(--body);border-radius:999px;padding:6px 14px;font:inherit;font-size:12.5px;cursor:pointer;transition:color .2s,border-color .2s;}
+.lb-close:hover{color:var(--ink);border-color:var(--muted);}
+.lb-close:focus{outline:2px solid var(--accent);outline-offset:2px;}
+.lb-body{padding:12px;background:var(--surface2);display:flex;justify-content:center;overflow:auto;}
+.lb-body img{display:block;width:auto;height:auto;max-width:100%;max-height:calc(92vh - 108px);border-radius:8px;}
+html:has(dialog[open]),body:has(dialog[open]){overflow:hidden;}
 
 /* 幕后搭子 */
 .agent-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;}
@@ -98,6 +117,7 @@ h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:tex
 .agent-card .role{font-size:12.5px;color:var(--accent);font-weight:500;margin-bottom:12px;display:block;}
 .agent-card p{font-size:13.5px;color:var(--body);line-height:1.85;margin:0 0 18px;}
 .lbl{font-size:10.5px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin:4px 0 10px;display:flex;justify-content:space-between;align-items:baseline;}
+.out-block{margin-top:auto;}
 .lbl em{font-style:normal;letter-spacing:.12em;color:var(--muted);opacity:.7;}
 .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:14px;margin-bottom:20px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;}
 .flow .s{display:flex;align-items:baseline;gap:7px;}
@@ -105,6 +125,17 @@ h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:tex
 .flow .s span{font-size:12px;color:var(--body);}
 .flow .ar{font-size:11px;color:var(--muted);opacity:.6;}
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:auto;}
+.gallery.duo{grid-template-columns:repeat(2,1fr);}
+.gallery.single{grid-template-columns:1fr;}
+.ui-shot{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);}
+.ui-shot img{display:block;width:100%;height:auto;}
+.ui-shot figcaption{padding:9px 10px;border-top:1px solid var(--line);font-size:10.5px;letter-spacing:.16em;color:var(--muted);text-align:center;}
+.img-zoom{display:block;width:100%;height:100%;padding:0;border:0;background:none;font:inherit;line-height:0;cursor:zoom-in;}
+.img-zoom:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+.ui-shot .img-zoom{height:auto;}
+.ui-shot .img-zoom:hover img{transform:scale(1.01);}
+.out.rec img{object-position:left center;}
+.out.page img{object-position:top center;}
 .out{aspect-ratio:3/4;border:1px solid var(--line);border-radius:12px;background:linear-gradient(160deg,var(--surface2),var(--surface));display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.2em;color:var(--muted);text-align:center;padding:8px;}
 figure.out{margin:0;position:relative;overflow:hidden;}
 figure.out img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1);}
@@ -115,6 +146,7 @@ figure.out figcaption{position:absolute;left:0;right:0;bottom:0;background:color
 /* 收口 CTA */
 .cta-panel{position:relative;z-index:1;margin:72px 0;padding:56px 32px;border-radius:24px;background:var(--grad);color:#fff;text-align:center;overflow:hidden;}
 .cta-panel h2{font-size:clamp(22px,3.5vw,34px);font-weight:700;margin:0 0 14px;letter-spacing:-.02em;}
+.cta-br{display:none;}
 .cta-panel p{font-size:15px;opacity:.92;margin:0 0 28px;}
 .cta-panel .btn{background:#fff;color:#111;border-color:transparent;}
 .cta-panel .btn:hover{box-shadow:0 14px 40px -12px rgba(0,0,0,.4);}
@@ -130,9 +162,13 @@ html.js .rv.on{opacity:1;transform:none;}
 @media (max-width:760px){
   .links a{display:none;}
   .grid{grid-template-columns:1fr;}
-  .hero{padding:120px 0 40px;}
+  .hero{padding:120px 0 28px;}
   .gallery{grid-template-columns:repeat(2,1fr);}
   .lead br{display:none;}
+  .cta-br{display:inline;}
+  dialog.lightbox{width:96vw;}
+  .lb-body{padding:8px;}
+  .lb-body img{max-height:calc(92vh - 96px);}
 }
 </style>
 </head>
@@ -169,34 +205,56 @@ html.js .rv.on{opacity:1;transform:none;}
     <div><span class="kicker">Works</span><h2>小程序</h2></div>
   </div>
   <div class="grid">
-
-    <div class="card rv">
-      <span class="badge live">● 已上线 v1.0.1</span>
-      <h3>让我捋捋</h3>
-      <span class="role">沟通误会消解</span>
-      <p>日常沟通中，我们总会带着自己的性格、经历和情绪去理解别人：有人习惯把关心说成建议，有人习惯通过沉默整理自己；有人觉得一句话很平常，有人却从里面听见了疏远、失望或拒绝。理解不同，并不代表一定是谁错了，有时候，我们只是太快相信了自己的第一反应；有时候，也会把过去受过的伤，带进眼前这段对话里。“让我捋捋” 想提供的就是一个短暂的停顿：在误会变成争吵之前，先看看这句话是不是还有别的可能；也给自己和对方，留一点重新理解的机会。</p>
-      <div class="meta">
-        <div class="limits">
-          <div class="row">不读心</div>
-          <div class="row">不判定对方人格</div>
-          <div class="row">不用性格差异解释威胁行为</div>
+    <div class="mini">
+      <div class="card rv">
+        <span class="badge live">● 已上线 v1.0.1</span>
+        <h3>让我捋捋</h3>
+        <span class="role">沟通误会消解</span>
+        <p>日常沟通中，我们总会带着自己的性格、经历和情绪去理解别人：有人习惯把关心说成建议，有人习惯通过沉默整理自己；有人觉得一句话很平常，有人却从里面听见了疏远、失望或拒绝。理解不同，并不代表一定是谁错了，有时候，我们只是太快相信了自己的第一反应；有时候，也会把过去受过的伤，带进眼前这段对话里。“让我捋捋” 想提供的就是一个短暂的停顿：在误会变成争吵之前，先看看这句话是不是还有别的可能；也给自己和对方，留一点重新理解的机会。</p>
+        <div class="meta">
+          <div class="limits">
+            <div class="row">不读心</div>
+            <div class="row">不判定对方人格</div>
+            <div class="row">不用性格差异解释威胁行为</div>
+          </div>
+          <span class="qr"><img src="assets/qr-lvlv.png" alt="让我捋捋小程序码" loading="lazy"></span>
         </div>
-        <span class="qr"><img src="assets/qr-lvlv.png" alt="让我捋捋小程序码" loading="lazy"></span>
+      </div>
+      <div class="phones-card rv">
+        <div class="phones">
+          <button class="phone-btn" type="button" data-shot="assets/lvlv-phone-mbti.png" data-title="让我捋捋 · ENFP 人格详情" data-alt="让我捋捋 ENFP 人格类型详情页：快乐小狗、活动家、核心画像、代表人物与偏好构成" aria-haspopup="dialog" aria-controls="introDialog" aria-label="放大查看让我捋捋 ENFP 人格详情">
+            <img src="assets/lvlv-phone-mbti.png" alt="让我捋捋 ENFP 人格类型详情页：快乐小狗、活动家、核心画像、代表人物与偏好构成" loading="lazy" width="700" height="1529">
+          </button>
+          <button class="phone-btn" type="button" data-shot="assets/lvlv-phone-result-upright.png" data-title="让我捋捋 · 结果页" data-alt="让我捋捋结果页：原话、第一反应、三种可能解释和一句可以这样问的求证" aria-haspopup="dialog" aria-controls="introDialog" aria-label="放大查看让我捋捋结果页">
+            <img src="assets/lvlv-phone-result-upright.png" alt="让我捋捋结果页：原话、第一反应、三种可能解释和一句可以这样问的求证" loading="lazy" width="700" height="1529">
+          </button>
+        </div>
       </div>
     </div>
-
-    <div class="card rv">
-      <span class="badge wip">◐ 开发中</span>
-      <h3>怼怼上线</h3>
-      <span class="role">边界表达训练</span>
-      <p>边界感不是天生的。很多时候我们不是不知道要说什么，而是在那个当下，被关系、场合和情绪推着走：该拒绝的答应了，该说的憋回去了，想好好说的，最后变成了争吵。“怼怼上线”把这些难开口的时刻做成可以重来的练习：职场、亲密与家庭、朋友熟人、陌生人，每类 5 个场景，两轮剧情由你回应，它会指出你这次更接近哪种倾向 —— 边界表达、策略化解、情绪反击还是沉默回避，再给你另一种可能。</p>
-      <div class="meta">
-        <div class="limits">
-          <div class="row">不打数字分数，不设唯一正确答案</div>
-          <div class="row">有的场景，忍住不说也是一种答案</div>
-          <div class="row">记录只存在你自己手机里</div>
+    <div class="mini">
+      <div class="card rv">
+        <span class="badge wip">◐ 开发中</span>
+        <h3>怼怼上线</h3>
+        <span class="role">边界表达训练</span>
+        <p>边界感不是天生的。很多时候我们不是不知道要说什么，而是在那个当下，被关系、场合和情绪推着走：该拒绝的答应了，该说的憋回去了，想好好说的，最后变成了争吵。“怼怼上线”把这些难开口的时刻做成可以重来的练习：职场、亲密与家庭、朋友熟人、陌生人，每类 5 个场景，两轮剧情由你回应，它会指出你这次更接近哪种倾向 —— 边界表达、策略化解、情绪反击还是沉默回避，再给你另一种可能。</p>
+        <div class="meta">
+          <div class="limits">
+            <div class="row">不打数字分数，不设唯一正确答案</div>
+            <div class="row">有的场景，忍住不说也是一种答案</div>
+            <div class="row">记录只存在你自己手机里</div>
+          </div>
+          <span class="qr ph"></span>
         </div>
-        <span class="qr ph">码待补</span>
+      </div>
+      <div class="phones-card rv">
+        <div class="phones">
+          <button class="phone-btn" type="button" data-shot="assets/duidui-phone-train-upright.png" data-title="怼怼上线 · 训练页" data-alt="怼怼上线训练页：抽到职场场景，对方说“你这个事情怎么还没弄完？大家都在等你。”，用户正在写下回应" aria-haspopup="dialog" aria-controls="introDialog" aria-label="放大查看怼怼上线训练页">
+            <img src="assets/duidui-phone-train-upright.png" alt="怼怼上线训练页：抽到职场场景，对方说“你这个事情怎么还没弄完？大家都在等你。”，用户正在写下回应" loading="lazy" width="700" height="1529">
+          </button>
+          <button class="phone-btn" type="button" data-shot="assets/duidui-phone-result-upright.png" data-title="怼怼上线 · 结果页" data-alt="怼怼上线结果页：本局完成 2/2 轮，判定为边界表达、守住边界，并展示逐轮回看" aria-haspopup="dialog" aria-controls="introDialog" aria-label="放大查看怼怼上线结果页">
+            <img src="assets/duidui-phone-result-upright.png" alt="怼怼上线结果页：本局完成 2/2 轮，判定为边界表达、守住边界，并展示逐轮回看" loading="lazy" width="700" height="1529">
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -206,28 +264,32 @@ html.js .rv.on{opacity:1;transform:none;}
 <section class="wrap" id="agents">
   <div class="sec-head">
     <div><span class="kicker">Backstage</span><h2>幕后搭子</h2></div>
-    <span class="more">不对外 · 无界面 · 自用</span>
   </div>
   <div class="grid">
 
     <div class="agent-card rv">
       <span class="idx">AGENT A · 本地工作台 · 小红书草稿</span>
       <h3>红薯草稿官</h3>
-      <span class="role">哪块不满意，就只重生成哪一块</span>
-      <p>跑在本地的 Next.js 工作台，SQLite 落库。三种内容类型，图片 / 标题 / 正文 / 标签分开编辑、分开重生成，不用整篇推翻。海报用 satori + resvg 排好版，最后我自己扫码存成小红书草稿。飞书消息和多维表格双向桥接。</p>
+      <span class="role">自动创作并上传草稿，发布由人工执行</span>
+      <p>运行于本地的 Next.js 工作台，主题固定。AI 每日自动选择创作内容，生成图片、标题、正文与标签并存入飞书；人工审核通过后下发发布指令，内容上传至工作台，扫码保存为小红书草稿，由人工完成发布。</p>
       <div class="lbl">流程 <em>Flow</em></div>
       <div class="flow">
-        <span class="s"><b>01</b><span>选内容类型</span></span><span class="ar">→</span>
-        <span class="s"><b>02</b><span>分别生成图 / 文 / 标签</span></span><span class="ar">→</span>
-        <span class="s"><b>03</b><span>海报排版</span></span><span class="ar">→</span>
-        <span class="s"><b>04</b><span>我扫码确认</span></span><span class="ar">→</span>
+        <span class="s"><b>01</b><span>挑选创作主题</span></span><span class="ar">→</span>
+        <span class="s"><b>02</b><span>生成图 / 文 / 标签</span></span><span class="ar">→</span>
+        <span class="s"><b>03</b><span>上传工作台</span></span><span class="ar">→</span>
+        <span class="s"><b>04</b><span>人工扫码确认</span></span><span class="ar">→</span>
         <span class="s"><b>05</b><span>存为草稿</span></span>
       </div>
-      <div class="lbl">成品 <em>Output</em></div>
-      <div class="gallery">
-        <figure class="out"><img src="assets/hanzi-mu.jpg" alt="汉字系列海报 · 木" loading="lazy"><figcaption>木</figcaption></figure>
-        <figure class="out"><img src="assets/hanzi-quan.jpg" alt="汉字系列海报 · 全" loading="lazy"><figcaption>全</figcaption></figure>
-        <figure class="out"><img src="assets/hanzi-zhu.jpg" alt="汉字系列海报 · 竹" loading="lazy"><figcaption>竹</figcaption></figure>
+      <div class="out-block">
+        <div class="lbl">成品 <em>Output</em></div>
+        <div class="gallery single">
+          <figure class="ui-shot">
+            <button class="img-zoom" type="button" data-shot="assets/xhs-workbench.jpg" data-title="红薯草稿官 · 本地工作台" data-alt="本地工作台界面：汉字「牛」的成品海报，右侧是标题、正文、标签编辑区和小程序二维码生成入口" data-wide aria-label="放大查看红薯草稿官本地工作台截图">
+              <img src="assets/xhs-workbench.jpg" alt="本地工作台界面：汉字「牛」的成品海报，右侧是标题、正文、标签编辑区和小程序二维码生成入口" loading="lazy" width="1400" height="773">
+            </button>
+            <figcaption>本地工作台</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
 
@@ -243,37 +305,27 @@ html.js .rv.on{opacity:1;transform:none;}
         <span class="s"><b>03</b><span>Playwright 填后台</span></span><span class="ar">→</span>
         <span class="s"><b>04</b><span>停在待审核</span></span>
       </div>
-      <div class="lbl">成品 <em>Output</em></div>
-      <div class="gallery">
-        <figure class="out"><img src="assets/sticker-1.jpg" alt="微信贴图成品 01" loading="lazy" onerror="this.closest('figure').classList.add('noimg');this.remove();"><figcaption>贴图 01</figcaption></figure>
-        <figure class="out"><img src="assets/sticker-2.jpg" alt="微信贴图成品 02" loading="lazy" onerror="this.closest('figure').classList.add('noimg');this.remove();"><figcaption>贴图 02</figcaption></figure>
-        <figure class="out"><img src="assets/sticker-3.jpg" alt="微信贴图成品 03" loading="lazy" onerror="this.closest('figure').classList.add('noimg');this.remove();"><figcaption>贴图 03</figcaption></figure>
+      <div class="out-block">
+        <div class="lbl">成品 <em>Output</em></div>
+        <div class="gallery duo">
+          <figure class="out rec">
+            <button class="img-zoom" type="button" data-shot="assets/wechat-feishu-record.jpg" data-title="微信草稿官 · 飞书产出记录" data-alt="飞书里「微信草稿官」的产出记录：成品贴图、标题、正文与待审核状态" data-wide aria-label="放大查看飞书产出记录">
+              <img src="assets/wechat-feishu-record.jpg" alt="飞书里「微信草稿官」的产出记录：成品贴图、标题、正文与待审核状态" loading="lazy" width="1200" height="905">
+            </button>
+            <figcaption>飞书产出记录</figcaption>
+          </figure>
+          <figure class="out page">
+            <button class="img-zoom" type="button" data-shot="assets/wechat-mp-home.jpg" data-title="微信草稿官 · 公众号主页" data-alt="公众号「徐慢慢手记」主页，展示已发布的贴图与文章" aria-label="放大查看公众号主页截图">
+              <img src="assets/wechat-mp-home.jpg" alt="公众号「徐慢慢手记」主页，展示已发布的贴图与文章" loading="lazy" width="800" height="1731">
+            </button>
+            <figcaption>公众号主页</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
 
     <div class="agent-card rv">
-      <span class="idx">AGENT C · 播客 → 文字稿</span>
-      <h3>耳朵翻译官</h3>
-      <span class="role">把听过的播客变成能检索的文字</span>
-      <p>丢一个播客链接进去，它自己去找并验证 RSS，拿到音频后交给转写服务，产出带时间戳的文字稿和 PDF，最后存进我的 Obsidian 笔记库。目前还在搭基座，只有两次提交。</p>
-      <div class="lbl">流程 <em>Flow</em></div>
-      <div class="flow">
-        <span class="s"><b>01</b><span>收到播客链接</span></span><span class="ar">→</span>
-        <span class="s"><b>02</b><span>发现并验证 RSS</span></span><span class="ar">→</span>
-        <span class="s"><b>03</b><span>音频转写</span></span><span class="ar">→</span>
-        <span class="s"><b>04</b><span>出 PDF</span></span><span class="ar">→</span>
-        <span class="s"><b>05</b><span>存入笔记库</span></span>
-      </div>
-      <div class="lbl">成品 <em>Output</em></div>
-      <div class="gallery">
-        <div class="out">文字稿 PDF</div>
-        <div class="out">笔记库条目</div>
-        <div class="out">RSS 验证记录</div>
-      </div>
-    </div>
-
-    <div class="agent-card rv">
-      <span class="idx">AGENT D · 参考 → 二创建议 → 成图</span>
+      <span class="idx">AGENT C · 参考 → 二创建议 → 成图</span>
       <h3>图片创作魔法师</h3>
       <span class="role">每天自动出图，出完过两道验收</span>
       <p>每天从即梦采集参考作品，先给出「再创建议」，再按建议出图（1536×2048 线稿风）。图出来后要过两道关 —— 文件完整性检查 + 视觉复核 —— 都过了才写回飞书多维表格，交接给红薯草稿官。有文件锁防重跑，中途断了能续传。</p>
@@ -285,18 +337,27 @@ html.js .rv.on{opacity:1;transform:none;}
         <span class="s"><b>04</b><span>双重验收</span></span><span class="ar">→</span>
         <span class="s"><b>05</b><span>写回飞书表格</span></span>
       </div>
-      <div class="lbl">成品 <em>Output</em></div>
-      <div class="gallery">
-        <div class="out">线稿风成图</div>
-        <div class="out">二创建议</div>
-        <div class="out">表格记录</div>
+    </div>
+
+    <div class="agent-card rv">
+      <span class="idx">AGENT D · 播客 → 文字稿</span>
+      <h3>耳朵翻译官</h3>
+      <span class="role">把听过的播客变成能检索的文字</span>
+      <p>丢一个播客链接进去，它自己去找并验证 RSS，拿到音频后交给转写服务，产出带时间戳的文字稿和 PDF，最后存进我的 Obsidian 笔记库。目前还在搭基座，只有两次提交。</p>
+      <div class="lbl">流程 <em>Flow</em></div>
+      <div class="flow">
+        <span class="s"><b>01</b><span>收到播客链接</span></span><span class="ar">→</span>
+        <span class="s"><b>02</b><span>发现并验证 RSS</span></span><span class="ar">→</span>
+        <span class="s"><b>03</b><span>音频转写</span></span><span class="ar">→</span>
+        <span class="s"><b>04</b><span>出 PDF</span></span><span class="ar">→</span>
+        <span class="s"><b>05</b><span>存入笔记库</span></span>
       </div>
     </div>
   </div>
 
   <div class="cta-panel rv">
-    <h2>它们只做到草稿，发布永远是我自己点。</h2>
-    <p>四个 agent 分工接住内容流程的每一段，最后一步留给人。</p>
+    <h2>工具摊开可能性，<br class="cta-br">选择留给人。</h2>
+    <p>愿它们帮上忙。</p>
     <a class="btn" href="#top">回到顶部 ↑</a>
   </div>
 </section>
@@ -307,6 +368,16 @@ html.js .rv.on{opacity:1;transform:none;}
     <span>微信内扫码可用</span>
   </div>
 </footer>
+
+<dialog class="lightbox" id="introDialog" aria-label="查看大图">
+  <div class="lb-head">
+    <span id="introTitle">让我捋捋 · ENFP 人格详情</span>
+    <button type="button" class="lb-close" id="closeIntro">关闭 ✕</button>
+  </div>
+  <div class="lb-body">
+    <img id="introImg" src="assets/lvlv-phone-mbti.png" alt="让我捋捋 ENFP 人格详情界面">
+  </div>
+</dialog>
 
 <script>
   /* 平滑滚动（Lenis，离线回退原生） */
@@ -339,6 +410,32 @@ html.js .rv.on{opacity:1;transform:none;}
   try{var saved=localStorage.getItem('theme');if(saved)root.setAttribute('data-theme',saved);}catch(e){}
   var tb=document.getElementById('themeToggle');
   if(tb){tb.addEventListener('click',function(){var d=root.getAttribute('data-theme')==='dark';root.setAttribute('data-theme',d?'light':'dark');try{localStorage.setItem('theme',d?'light':'dark');}catch(e){}});}
+
+  /* 产品示意图大图 */
+  (function(){
+    var dlg=document.getElementById('introDialog');
+    var dlgImg=document.getElementById('introImg');
+    var dlgTitle=document.getElementById('introTitle');
+    var closeBtn=document.getElementById('closeIntro');
+    var triggers=document.querySelectorAll('[data-shot]');
+    if(!dlg||!triggers.length)return;
+    if(typeof dlg.showModal!=='function'){
+      triggers.forEach(function(btn){
+        btn.addEventListener('click',function(){window.open(btn.getAttribute('data-shot'),'_blank','noopener');});
+      });
+      return;
+    }
+    triggers.forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(dlgImg){dlgImg.src=btn.getAttribute('data-shot');dlgImg.alt=btn.getAttribute('data-alt')||'';}
+        if(dlgTitle){dlgTitle.textContent=btn.getAttribute('data-title')||'查看大图';}
+        dlg.classList.toggle('wide',btn.hasAttribute('data-wide'));
+        dlg.showModal();
+      });
+    });
+    if(closeBtn){closeBtn.addEventListener('click',function(){dlg.close();});}
+    dlg.addEventListener('click',function(e){if(e.target===dlg){dlg.close();}});
+  })();
 
   /* 滚动入场 */
   if('IntersectionObserver' in window){
