@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>好开心 — 自己做的小东西</title>
+<meta name="description" content="两个微信小程序（让我捋捋 / 怼怼上线），和四个跑在后台的内容 agent。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23f1eee6'/><text y='72' x='50' font-size='62' text-anchor='middle' fill='%236e2b25' font-family='serif'>好</text></svg>">
+<style>
+:root{
+  --bg:#f1eee6;
+  --card:#f6f4ee;
+  --ink:#1d1c1a;
+  --body:#4c483f;
+  --muted:#8b8578;
+  --line:#d8d3c6;
+  --dark:#23211d;
+  --wine:#6e2b25;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;line-height:1.7;font-weight:400;
+}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:860px;margin:0 auto;padding:0 28px 80px;}
+
+/* 顶栏 */
+header{border-bottom:1px solid var(--line);background:rgba(241,238,230,.94);backdrop-filter:blur(6px);position:sticky;top:0;z-index:10;}
+.head-inner{max-width:860px;margin:0 auto;padding:20px 28px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;}
+.brand{font-size:15px;font-weight:500;letter-spacing:.4em;}
+nav{display:flex;gap:26px;}
+nav a{
+  font-size:11px;letter-spacing:.28em;color:var(--muted);
+  padding-bottom:3px;border-bottom:1px solid transparent;
+  transition:color .2s,border-color .2s;
+}
+nav a:hover{color:var(--ink);}
+nav a.active{color:var(--ink);border-bottom-color:var(--ink);}
+
+.page{display:none;animation:in .35s ease both;}
+.page.active{display:block;}
+@keyframes in{from{opacity:0;}to{opacity:1;}}
+
+.micro{
+  font-size:10px;letter-spacing:.3em;color:var(--muted);
+  text-transform:uppercase;
+}
+
+/* 标题区 */
+.mast{padding:52px 0 30px;position:relative;}
+.mast-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;}
+h1{
+  font-weight:300;font-size:44px;letter-spacing:.14em;line-height:1.5;
+  margin:0;
+}
+.mast .micro{letter-spacing:.24em;}
+
+/* 一句自我介绍 */
+.oneline{
+  max-width:46ch;margin:40px auto 8px;text-align:center;
+  font-size:14px;font-weight:300;letter-spacing:.08em;line-height:2.2;color:var(--body);
+}
+.oneline .wine{color:var(--wine);}
+
+/* 分节标题 */
+.sec{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin:52px 0 0;padding-bottom:14px;border-bottom:1px solid var(--ink);
+}
+.sec h2{font-weight:300;font-size:22px;letter-spacing:.22em;margin:0;}
+.sec .micro{letter-spacing:.24em;}
+
+/* 总清单 */
+.list{border-bottom:1px solid var(--line);}
+.entry{
+  display:flex;gap:22px;align-items:baseline;
+  padding:22px 6px;border-bottom:1px solid var(--line);
+  transition:background .2s ease;
+  cursor:pointer;
+}
+.entry:last-child{border-bottom:none;}
+.entry:hover{background:rgba(255,255,255,.5);}
+.entry .n{flex:0 0 30px;font-size:10px;letter-spacing:.26em;color:var(--muted);}
+.entry .mid{flex:1;min-width:0;}
+.entry .nm{
+  font-weight:300;font-size:21px;letter-spacing:.13em;line-height:1.5;
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+}
+.entry .nm i{
+  font-style:normal;font-size:9.5px;letter-spacing:.24em;color:var(--muted);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px;
+  text-transform:uppercase;
+}
+.entry .nm i.live{color:var(--wine);border-color:rgba(110,43,37,.35);}
+.entry .sm{font-size:12.5px;color:var(--body);letter-spacing:.04em;line-height:1.9;margin-top:4px;}
+.entry .to{
+  flex:0 0 auto;font-size:10px;letter-spacing:.26em;color:var(--muted);
+  transition:color .2s ease,transform .2s ease;
+}
+.entry:hover .to{color:var(--wine);transform:translateX(4px);}
+
+/* 清单分组头 */
+.grp-h{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:11px 6px;border-top:1px solid var(--ink);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.55);
+}
+.grp:first-child .grp-h{border-top:none;}
+.grp-h .gt{
+  font-size:10px;letter-spacing:.28em;color:var(--ink);text-transform:uppercase;
+  display:flex;align-items:baseline;gap:12px;
+}
+.grp-h .gt em{font-style:normal;font-size:11.5px;letter-spacing:.16em;color:var(--body);}
+.grp-h .gc{font-size:10px;letter-spacing:.24em;color:var(--muted);}
+
+/* 定位高亮 */
+.flash{animation:flash 2.4s ease both;}
+@keyframes flash{
+  0%,55%{background:rgba(110,43,37,.06);box-shadow:inset 3px 0 0 var(--wine);}
+  100%{background:transparent;box-shadow:inset 3px 0 0 transparent;}
+}
+
+/* 胶囊按钮 */
+.pill{
+  display:inline-block;border:1px solid var(--ink);border-radius:999px;
+  padding:9px 24px;font-size:10.5px;letter-spacing:.28em;
+  transition:background .2s ease,color .2s ease;
+}
+.pill:hover{background:var(--ink);color:#f3efe6;}
+.pill.wine{border-color:var(--wine);color:var(--wine);}
+.pill.wine:hover{background:var(--wine);color:#f3efe6;}
+
+/* 产品页 */
+.product{border-top:1px solid var(--ink);padding:38px 0 44px;}
+.p-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;}
+.p-grid{display:flex;gap:36px;align-items:flex-start;}
+.p-media{
+  flex:0 0 230px;height:320px;position:relative;
+  background:radial-gradient(130% 150% at 25% 0%, #3a362e 0%, #23211d 58%, #1a1815 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.p-media .pname{
+  color:#f3efe6;font-weight:300;font-size:21px;letter-spacing:.3em;
+  writing-mode:vertical-rl;line-height:2;
+}
+.p-media .ph-note{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:rgba(243,239,230,.4);font-size:9px;letter-spacing:.3em;}
+.p-info{flex:1;}
+.p-name{font-weight:300;font-size:30px;letter-spacing:.16em;margin:6px 0 6px;}
+.p-tags{margin-bottom:20px;}
+.p-info .d{font-size:13.5px;color:var(--body);line-height:2.1;max-width:54ch;margin-bottom:22px;}
+.limits{border-top:1px dashed var(--line);padding-top:16px;margin-bottom:24px;}
+.limits .row{font-size:12px;color:var(--muted);letter-spacing:.06em;line-height:2.1;display:flex;gap:12px;}
+.limits .row::before{content:"—";color:var(--wine);}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px;}
+.shot{
+  aspect-ratio:9/13;background:linear-gradient(160deg,#e9e5da,#ded9cb);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;letter-spacing:.3em;color:var(--muted);
+  border:1px solid var(--line);
+}
+
+/* 流程 */
+.pipe{border-top:1px solid var(--line);}
+.pipe .row{
+  display:flex;gap:22px;align-items:baseline;
+  padding:22px 6px;border-bottom:1px solid var(--line);
+  transition:background .2s ease;
+}
+.pipe .row:hover{background:rgba(255,255,255,.45);}
+.pipe .n{font-size:10px;letter-spacing:.3em;color:var(--muted);flex:0 0 34px;}
+.pipe .t{font-weight:300;font-size:17px;letter-spacing:.16em;flex:0 0 150px;}
+.pipe .x{font-size:12.5px;color:var(--body);letter-spacing:.04em;}
+.pipe .row.last .t::after{content:" · 终点";font-size:10px;color:var(--wine);letter-spacing:.2em;}
+
+/* 单个 agent 块 */
+.agent{border-top:1px solid var(--ink);padding:34px 0 40px;}
+.a-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+.a-name{font-weight:300;font-size:26px;letter-spacing:.16em;margin:4px 0 6px;}
+.a-tag{display:block;margin-bottom:16px;}
+.a-d{font-size:13.5px;color:var(--body);line-height:2.1;max-width:58ch;margin-bottom:22px;}
+.a-lbl{
+  font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;
+  padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:14px;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.a-lbl em{font-style:normal;letter-spacing:.2em;color:#a49e91;}
+
+/* 流程链 */
+.steps{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  padding:16px 18px;margin-bottom:24px;
+  background:rgba(255,255,255,.55);border:1px solid var(--line);
+}
+.steps .s{display:flex;align-items:baseline;gap:8px;}
+.steps .s b{font-size:9.5px;letter-spacing:.2em;color:var(--wine);font-weight:600;}
+.steps .s span{font-size:12.5px;color:var(--body);letter-spacing:.04em;}
+.steps .ar{font-size:11px;color:#c4bfb2;}
+
+/* 成品图 */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.out{
+  aspect-ratio:3/4;border:1px solid var(--line);
+  background:linear-gradient(160deg,#e9e5da,#ded9cb);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;letter-spacing:.26em;color:var(--muted);text-align:center;padding:8px;
+}
+figure.out{margin:0;position:relative;overflow:hidden;cursor:zoom-in;transition:opacity .2s ease;}
+figure.out:hover{opacity:.88;}
+figure.out img{width:100%;height:100%;object-fit:cover;display:block;}
+figure.out figcaption{
+  position:absolute;left:0;right:0;bottom:0;
+  background:rgba(241,238,230,.94);border-top:1px solid var(--line);
+  font-size:9.5px;letter-spacing:.24em;color:var(--body);
+  padding:8px 6px;text-align:center;
+}
+
+/* 小程序码 */
+.p-media.qr{background:#fff;border:1px solid var(--line);flex-direction:column;gap:12px;}
+.p-media.qr img{width:78%;height:auto;display:block;}
+.p-media.qr .qr-cap{font-size:9.5px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;}
+
+/* 看大图 */
+.lb{
+  position:fixed;inset:0;z-index:50;display:none;
+  background:rgba(29,28,26,.92);align-items:center;justify-content:center;
+  cursor:zoom-out;padding:40px;
+}
+.lb.open{display:flex;}
+.lb img{max-width:min(560px,86vw);max-height:86vh;width:auto;height:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.lb .lb-x{position:absolute;top:22px;right:26px;font-size:11px;letter-spacing:.3em;color:rgba(243,239,230,.6);}
+
+/* 收口 */
+.coda{
+  max-width:40ch;margin:60px auto 0;text-align:center;
+  font-weight:300;font-size:19px;letter-spacing:.14em;line-height:2.4;color:var(--ink);
+}
+.coda .wine{color:var(--wine);}
+
+.ph{
+  height:150px;border:1px solid var(--line);
+  background:linear-gradient(160deg,#e9e5da,#ded9cb);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;letter-spacing:.3em;color:var(--muted);
+}
+.todo{font-size:10px;letter-spacing:.26em;color:var(--muted);text-transform:uppercase;margin-top:26px;}
+footer{max-width:860px;margin:0 auto;padding:0 28px 44px;border-top:1px solid var(--line);}
+.foot-inner{padding-top:22px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;}
+
+@media (max-width:640px){
+  .wrap{padding:0 18px 60px;}
+  .head-inner{padding:16px 18px;flex-wrap:wrap;}
+  h1{font-size:26px;letter-spacing:.1em;}
+  .p-grid{flex-direction:column;gap:24px;}
+  .p-media{flex:0 0 auto;width:100%;height:240px;}
+  .pipe .row{flex-wrap:wrap;}
+  .pipe .t{flex:0 0 auto;}
+  .sec h2{font-size:17px;}
+  .shots{grid-template-columns:1fr 1fr;}
+  .entry .to{display:none;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .p-media.qr img{width:200px;}
+  .a-name{font-size:21px;letter-spacing:.12em;}
+  .steps{gap:8px;padding:14px 14px;}
+  .steps .ar{display:none;}
+  .steps .s{flex:0 0 46%;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <a class="brand" href="#/home">好开心</a>
+    <nav>
+      <a href="#/home" data-nav="home">首页</a>
+      <a href="#/mp" data-nav="mp">小程序</a>
+      <a href="#/agent" data-nav="agent">幕后 agent</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- 首页 -->
+<section id="page-home" class="page">
+
+  <div class="mast">
+    <div class="mast-row">
+      <span class="micro">Cru · 好开心</span>
+      <span class="micro">自 2026</span>
+    </div>
+    <h1>白天上班，<br>晚上写点自己的东西。</h1>
+  </div>
+
+  <div class="sec" style="margin-top:34px;">
+    <h2>都做了什么</h2>
+    <span class="micro">All Work · 06</span>
+  </div>
+
+  <div class="list">
+
+    <div class="grp">
+      <div class="grp-h">
+        <span class="gt">小程序 <em>微信里打开就用</em></span>
+        <span class="gc">02</span>
+      </div>
+
+      <a class="entry" href="#/mp/lvlv">
+        <span class="n">01</span>
+        <span class="mid">
+          <span class="nm">让我捋捋 <i class="live">已上线</i></span>
+          <span class="sm">把一句说拧了的话拆开看，再给你一句能直接发出去的话。</span>
+        </span>
+        <span class="to">小程序 →</span>
+      </a>
+
+      <a class="entry" href="#/mp/duidui">
+        <span class="n">02</span>
+        <span class="mid">
+          <span class="nm">怼怼上线 <i>迭代中</i></span>
+          <span class="sm">20 个场景，两轮剧情，把不敢说的话先练一遍。</span>
+        </span>
+        <span class="to">小程序 →</span>
+      </a>
+    </div>
+
+    <div class="grp">
+      <div class="grp-h">
+        <span class="gt">幕后 agent <em>自用，不对外</em></span>
+        <span class="gc">04</span>
+      </div>
+
+      <a class="entry" href="#/agent/ear">
+        <span class="n">03</span>
+      <span class="mid">
+        <span class="nm">耳朵翻译官 <i>自用</i></span>
+        <span class="sm">播客链接丢进去，自动找源、转写、出 PDF，躺进我的笔记库。</span>
+      </span>
+      <span class="to">幕后 →</span>
+    </a>
+
+    <a class="entry" href="#/agent/image">
+      <span class="n">04</span>
+      <span class="mid">
+        <span class="nm">图片创作魔法师 <i>自用</i></span>
+        <span class="sm">每天采集参考作品，给二创建议，出图后过两道验收。</span>
+      </span>
+      <span class="to">幕后 →</span>
+    </a>
+
+    <a class="entry" href="#/agent/rednote">
+      <span class="n">05</span>
+      <span class="mid">
+        <span class="nm">红薯草稿官 <i>自用</i></span>
+        <span class="sm">小红书图文工作台，哪块不满意就只重生成哪一块。</span>
+      </span>
+      <span class="to">幕后 →</span>
+    </a>
+
+      <a class="entry" href="#/agent/weixin">
+        <span class="n">06</span>
+        <span class="mid">
+          <span class="nm">微信草稿官 <i>自用</i></span>
+          <span class="sm">公众号文章和贴图，一路填到后台就停手。</span>
+        </span>
+        <span class="to">幕后 →</span>
+      </a>
+    </div>
+
+  </div>
+
+  <p class="todo">（个人介绍为初版文案，待替换 · 配图待补）</p>
+</section>
+
+<!-- 小程序 -->
+<section id="page-mp" class="page">
+  <div class="mast">
+    <div class="mast-row">
+      <span class="micro">Works</span>
+      <span class="micro">微信内打开即用</span>
+    </div>
+    <h1>两个小程序</h1>
+  </div>
+
+  <p class="oneline">
+    两个都在微信里，点开就用，不用注册，不用登录。<br>
+    一个是沟通误解消解 —— 把一句说拧了的话拆开看；<br>
+    一个是边界表达训练 —— 把不敢说的话先练一遍。<br>
+    做完的事不上传，分析完的对话不留存，<span class="wine">记录只在你自己手机里</span>。
+  </p>
+
+  <!-- 让我捋捋 -->
+  <div class="product" id="x-lvlv" style="margin-top:44px;">
+    <div class="p-top">
+      <span class="micro">No. 01</span>
+      <span class="micro">已上线 v1.0.1</span>
+    </div>
+    <div class="p-grid">
+      <div class="p-media qr">
+        <img src="assets/qr-lvlv.png" alt="让我捋捋 小程序码">
+        <span class="qr-cap">微信扫码打开</span>
+      </div>
+      <div class="p-info">
+        <div class="p-name">让我捋捋</div>
+        <div class="p-tags micro">沟通误解消解</div>
+        <div class="d">
+          把一句让你不舒服的话、或一段聊崩的对话贴进来。给你一个主解释 + 两个备选解释、信息缺口清单、安全风险提示，以及一句可直接复制的低对抗求证话术。
+        </div>
+        <div class="limits">
+          <div class="row">不读心，不判定对方人格</div>
+          <div class="row">不用性格差异解释威胁行为</div>
+          <div class="row">分析默认不落库，只有主动保存才写库</div>
+        </div>
+        <span class="pill wine">扫码体验</span>
+      </div>
+    </div>
+    <div class="shots">
+      <div class="shot">界面 待补</div>
+      <div class="shot">界面 待补</div>
+      <div class="shot">界面 待补</div>
+    </div>
+  </div>
+
+  <!-- 怼怼上线 -->
+  <div class="product" id="x-duidui">
+    <div class="p-top">
+      <span class="micro">No. 02</span>
+      <span class="micro">持续迭代中</span>
+    </div>
+    <div class="p-grid">
+      <div class="p-media">
+        <span class="pname">怼怼上线</span>
+        <span class="ph-note">小程序码待补</span>
+      </div>
+      <div class="p-info">
+        <div class="p-name">怼怼上线</div>
+        <div class="p-tags micro">边界表达训练器</div>
+        <div class="d">
+          选一个场景开一局，两轮剧情，你来回应。四类场景各 5 个：职场、亲密与家庭、朋友熟人、陌生人。识别你这次的回应倾向 —— 边界表达 / 策略化解 / 情绪反击 / 沉默回避，并给出另一种可能的说法。
+        </div>
+        <div class="limits">
+          <div class="row">不打数字分数，不设唯一正确答案</div>
+          <div class="row">有的场景，忍住不说也是一种答案</div>
+          <div class="row">记录只存在你自己手机里</div>
+        </div>
+        <span class="pill wine">扫码体验</span>
+      </div>
+    </div>
+    <div class="shots">
+      <div class="shot">界面 待补</div>
+      <div class="shot">界面 待补</div>
+      <div class="shot">界面 待补</div>
+    </div>
+  </div>
+  <p class="todo">（小程序码与界面截图待补）</p>
+</section>
+
+<!-- 幕后 -->
+<section id="page-agent" class="page">
+  <div class="mast">
+    <div class="mast-row">
+      <span class="micro">Backstage</span>
+      <span class="micro">不对外 · 无界面</span>
+    </div>
+    <h1>幕后 agent</h1>
+  </div>
+
+  <p class="oneline">
+    四个 agent 跑在我自己的电脑上，没有界面，也不对外开放。<br>
+    它们分工接住我内容流程的每一段 —— 听播客、采参考、写图文、填后台，<br>
+    一路做到待审草稿就停手。<span class="wine">发布那一步，永远是我自己点</span>。
+  </p>
+
+  <div class="agent" id="x-ear">
+    <div class="a-top">
+      <span class="micro">Agent A</span>
+      <span class="micro">播客 → 文字稿 · 起步阶段</span>
+    </div>
+    <h3 class="a-name">耳朵翻译官</h3>
+    <span class="a-tag micro">把听过的播客变成能检索的文字</span>
+    <div class="a-d">
+      丢一个播客链接进去，它自己去找并验证 RSS，拿到音频后交给转写服务，产出带时间戳的文字稿和 PDF，最后存进我的 Obsidian 笔记库。目前还在搭基座，只有两次提交。
+    </div>
+
+    <div class="a-lbl">流程 <em>Flow</em></div>
+    <div class="steps">
+      <span class="s"><b>01</b><span>收到播客链接</span></span><span class="ar">→</span>
+      <span class="s"><b>02</b><span>发现并验证 RSS</span></span><span class="ar">→</span>
+      <span class="s"><b>03</b><span>音频转写</span></span><span class="ar">→</span>
+      <span class="s"><b>04</b><span>出 PDF</span></span><span class="ar">→</span>
+      <span class="s"><b>05</b><span>存入笔记库</span></span>
+    </div>
+
+    <div class="a-lbl">成品 <em>Output</em></div>
+    <div class="gallery">
+      <div class="out">文字稿 PDF</div>
+      <div class="out">笔记库条目</div>
+      <div class="out">RSS 验证记录</div>
+    </div>
+  </div>
+
+  <div class="agent" id="x-image">
+    <div class="a-top">
+      <span class="micro">Agent B</span>
+      <span class="micro">参考 → 二创建议 → 成图</span>
+    </div>
+    <h3 class="a-name">图片创作魔法师</h3>
+    <span class="a-tag micro">每天自动出图，出完过两道验收</span>
+    <div class="a-d">
+      每天从即梦采集参考作品，先给出「再创建议」，再按建议出图（1536×2048 线稿风）。图出来后要过两道关 —— 文件完整性检查 + 视觉复核 —— 都过了才写回飞书多维表格，交接给红薯草稿官。有文件锁防重跑，中途断了能续传。
+    </div>
+
+    <div class="a-lbl">流程 <em>Flow</em></div>
+    <div class="steps">
+      <span class="s"><b>01</b><span>采集即梦参考作品</span></span><span class="ar">→</span>
+      <span class="s"><b>02</b><span>生成二创建议</span></span><span class="ar">→</span>
+      <span class="s"><b>03</b><span>生图 1536×2048</span></span><span class="ar">→</span>
+      <span class="s"><b>04</b><span>双重验收</span></span><span class="ar">→</span>
+      <span class="s"><b>05</b><span>写回飞书表格</span></span>
+    </div>
+
+    <div class="a-lbl">成品 <em>Output</em></div>
+    <div class="gallery">
+      <div class="out">线稿风成图</div>
+      <div class="out">二创建议</div>
+      <div class="out">表格记录</div>
+    </div>
+  </div>
+
+  <div class="agent" id="x-rednote">
+    <div class="a-top">
+      <span class="micro">Agent C</span>
+      <span class="micro">本地工作台 · 小红书草稿</span>
+    </div>
+    <h3 class="a-name">红薯草稿官</h3>
+    <span class="a-tag micro">哪块不满意，就只重生成哪一块</span>
+    <div class="a-d">
+      跑在本地的 Next.js 工作台，SQLite 落库。三种内容类型，图片 / 标题 / 正文 / 标签分开编辑、分开重生成，不用整篇推翻。海报用 satori + resvg 排好版，最后我自己扫码存成小红书草稿。飞书消息和多维表格双向桥接。
+    </div>
+
+    <div class="a-lbl">流程 <em>Flow</em></div>
+    <div class="steps">
+      <span class="s"><b>01</b><span>选内容类型</span></span><span class="ar">→</span>
+      <span class="s"><b>02</b><span>分别生成图 / 文 / 标签</span></span><span class="ar">→</span>
+      <span class="s"><b>03</b><span>海报排版</span></span><span class="ar">→</span>
+      <span class="s"><b>04</b><span>我扫码确认</span></span><span class="ar">→</span>
+      <span class="s"><b>05</b><span>存为草稿</span></span>
+    </div>
+
+    <div class="a-lbl">成品 <em>Output</em></div>
+    <div class="gallery">
+      <figure class="out"><img src="assets/hanzi-mu.jpg" alt="汉字系列海报 · 木" loading="lazy"><figcaption>木</figcaption></figure>
+      <figure class="out"><img src="assets/hanzi-quan.jpg" alt="汉字系列海报 · 全" loading="lazy"><figcaption>全</figcaption></figure>
+      <figure class="out"><img src="assets/hanzi-zhu.jpg" alt="汉字系列海报 · 竹" loading="lazy"><figcaption>竹</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="agent" id="x-weixin">
+    <div class="a-top">
+      <span class="micro">Agent D</span>
+      <span class="micro">公众号文章 + 微信贴图</span>
+    </div>
+    <h3 class="a-name">微信草稿官</h3>
+    <span class="a-tag micro">一路填到后台，然后停手</span>
+    <div class="a-d">
+      两条线：公众号文章和微信贴图。文章素材从 Obsidian 的「微信/」目录来，贴图记录走飞书多维表格，用 Playwright 操作微信后台填内容，配图统一走 image_gen。每条都有状态：待创作 → 待重试 → 待审核 → 待发布 → 已完成。10 月基本每天都有产出。
+    </div>
+
+    <div class="a-lbl">流程 <em>Flow</em></div>
+    <div class="steps">
+      <span class="s"><b>01</b><span>笔记库 / 表格取素材</span></span><span class="ar">→</span>
+      <span class="s"><b>02</b><span>生成正文与配图</span></span><span class="ar">→</span>
+      <span class="s"><b>03</b><span>Playwright 填后台</span></span><span class="ar">→</span>
+      <span class="s"><b>04</b><span>停在待审核</span></span>
+    </div>
+
+    <div class="a-lbl">成品 <em>Output</em></div>
+    <div class="gallery">
+      <figure class="out"><img src="assets/sticker-1.jpg" alt="微信贴图成品" loading="lazy"><figcaption>贴图 01</figcaption></figure>
+      <figure class="out"><img src="assets/sticker-2.jpg" alt="微信贴图成品" loading="lazy"><figcaption>贴图 02</figcaption></figure>
+      <figure class="out"><img src="assets/sticker-3.jpg" alt="微信贴图成品" loading="lazy"><figcaption>贴图 03</figcaption></figure>
+    </div>
+  </div>
+
+  <p class="coda">
+    它们只做到草稿。<br>
+    发布那一步，<span class="wine">永远是我自己点</span>。
+  </p>
+</section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <span class="micro">好开心 · 自己做的小东西</span>
+    <span class="micro">微信内扫码可用</span>
+  </div>
+</footer>
+
+<div class="lb" id="lb"><span class="lb-x">关闭</span><img src="" alt=""></div>
+
+<script>
+  var pages={home:'page-home',mp:'page-mp',agent:'page-agent'};
+  function route(){
+    var raw=(location.hash||'#/home').replace('#/','');
+    var parts=raw.split('/');
+    var k=parts[0];
+    if(!pages[k])k='home';
+    var anchor=parts[1]||'';
+
+    Object.keys(pages).forEach(function(x){
+      document.getElementById(pages[x]).classList.toggle('active',x===k);
+    });
+    document.querySelectorAll('[data-nav]').forEach(function(el){
+      el.classList.toggle('active',el.dataset.nav===k);
+    });
+
+    document.querySelectorAll('.flash').forEach(function(el){el.classList.remove('flash');});
+
+    if(anchor){
+      var el=document.getElementById('x-'+anchor);
+      if(el){
+        var top=el.getBoundingClientRect().top+window.pageYOffset-84;
+        window.scrollTo({top:top,behavior:'smooth'});
+        el.classList.add('flash');
+        return;
+      }
+    }
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',route);
+  route();
+
+  /* 成品图看大图 */
+  var lb=document.getElementById('lb'), lbImg=lb.querySelector('img');
+  document.querySelectorAll('figure.out img').forEach(function(img){
+    img.addEventListener('click',function(){
+      lbImg.src=img.src; lbImg.alt=img.alt; lb.classList.add('open');
+    });
+  });
+  lb.addEventListener('click',function(){lb.classList.remove('open');});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')lb.classList.remove('open');
+  });
+</script>
+</body>
+</html>
